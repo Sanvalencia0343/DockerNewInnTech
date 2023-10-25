@@ -1,0 +1,38 @@
+version: lastest
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Prueba
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      docker-networks:
+  
+  backend:
+    depends_on:
+      - mysql
+    container_name: backend
+    build: back
+    ports: 
+      - "3001:3001"
+    networks:
+      docker-networks:
+
+  frontend:
+    depends_on:
+      - backend
+    container_name: frontend
+    build: front
+    ports: 
+      - "3000:3000"
+    networks:
+      docker-networks:
+
+networks:
+  docker-networks:  
